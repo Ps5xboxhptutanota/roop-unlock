@@ -100,14 +100,16 @@ def pre_check():
         CUDNN_VERSION = torch.backends.cudnn.version()
         if not torch.cuda.is_available():
             quit("You are using --gpu=nvidia flag but CUDA isn't available or properly installed on your system.")
-        if CUDA_VERSION > '11.8':
-            quit(f"CUDA version {CUDA_VERSION} is not supported - please downgrade to 11.8")
-        if CUDA_VERSION < '11.4':
-            quit(f"CUDA version {CUDA_VERSION} is not supported - please upgrade to 11.8")
+        # Updated CUDA version check to accept 12.6
+        if CUDA_VERSION > '12.6':
+            quit(f"CUDA version {CUDA_VERSION} is not supported - please downgrade to 12.6")
+        if CUDA_VERSION < '11.8':
+            quit(f"CUDA version {CUDA_VERSION} is not supported - please upgrade to 11.8 or higher")
+        # Updated CUDNN version check to accept 91002 (9.1.0.2)
         if CUDNN_VERSION < 8220:
-            quit(f"CUDNN version {CUDNN_VERSION} is not supported - please upgrade to 8.9.1")
-        if CUDNN_VERSION > 8910:
-            quit(f"CUDNN version {CUDNN_VERSION} is not supported - please downgrade to 8.9.1")
+            quit(f"CUDNN version {CUDNN_VERSION} is not supported - please upgrade to 8.9.1 or higher")
+        # Removed upper limit for CUDNN as 91002 is newer than 8.9.1
+        # Note: 91002 corresponds to CUDNN 9.1.0.2 which is compatible with CUDA 12.6
 
 
 def get_video_frame(video_path, frame_number = 1):
